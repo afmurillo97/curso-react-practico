@@ -3,6 +3,9 @@ import { createContext, useState, useEffect } from 'react'
 export const ShoppingCartContext = createContext()
 
 export const ShoppingCartProvider = ({children}) => {
+  // User Info: Create user
+  const [user, setUser] = useState({});
+
   // Shopping Cart · Increment quantity
   const [count, setCount] = useState(0)
 
@@ -34,11 +37,30 @@ export const ShoppingCartProvider = ({children}) => {
 
   // Get products by category
   const [searchByCategory, setSearchByCategory] = useState(null)
+  
+  const newCategory = (category) => {
+    let newValue = category;
+    switch (category) {
+      case "men's clothing":
+        newValue = "clothes"
+        break;
+      case "women's clothing":
+        newValue = "clothes"
+        break;
+      case "jewelery":
+        newValue = "furnitures"
+        break;
+    }
+    return newValue;
+  }
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
       .then(response => response.json())
-      .then(data => setItems(data))
+      .then(data => {
+        const newItems = data.map(product => ({...product, category:newCategory(product.category)}));
+        setItems(newItems)
+      })
   }, [])
 
   const filteredItemsByTitle = (items, searchByTitle) => {
@@ -46,7 +68,7 @@ export const ShoppingCartProvider = ({children}) => {
   }
 
   const filteredItemsByCategory = (items, searchByCategory) => {
-    return items?.filter(item => item.category.name.toLowerCase().includes(searchByCategory.toLowerCase()))
+    return items?.filter(item => item.category.toLowerCase().includes(searchByCategory.toLowerCase()))
   }
 
   const filterBy = (searchType, items, searchByTitle, searchByCategory) => {
@@ -96,7 +118,9 @@ export const ShoppingCartProvider = ({children}) => {
       setSearchByTitle,
       filteredItems,
       searchByCategory,
-      setSearchByCategory
+      setSearchByCategory,
+      user,
+      setUser,
     }}>
       {children}
     </ShoppingCartContext.Provider>
