@@ -100,11 +100,11 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            to='/sign-in'
+            to={ context.userSelected ? 'sign-out' : 'sign-in' }
             className={({ isActive }) =>
               isActive ? activeStyle : undefined
             }>
-            Sign In
+            { context.userSelected ? 'Sign Out' : 'Sign In' }
           </NavLink>
         </li>
         <li className='flex items-center'>
