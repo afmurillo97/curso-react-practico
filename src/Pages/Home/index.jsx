@@ -1,11 +1,18 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../Components/Layout'
 import Card from '../../Components/Card'
 import ProductDetail from '../../Components/ProductDetail'
 import { ShoppingCartContext } from '../../Context'
 
 function Home() {
+
   const context = useContext(ShoppingCartContext)
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    !context.userSelected && navigate('/sign-in') 
+  }, [context.userSelected])
 
   const renderView = () => {
     if (context.filteredItems?.length > 0) {
