@@ -14,6 +14,7 @@ function MyAccount() {
           <span className="text-[#7747ff]">Shopi</span>
         </div>
         <form 
+          onSubmit={ (e) => e.preventDefault() }
           className="flex flex-col gap-3"
         >
           <div className="block relative"> 
@@ -21,7 +22,7 @@ function MyAccount() {
             <input 
               type="text" 
               id="name" 
-              value={userSelected?.name}
+              defaultValue={userSelected?.name || ''}
               className="rounded border border-gray-200 text-sm w-full font-normal leading-[18px] text-black tracking-[0px] appearance-none block h-11 m-0 p-[11px] focus:ring-2 ring-offset-2  ring-gray-900 outline-0" 
             />
           </div>
@@ -30,7 +31,7 @@ function MyAccount() {
             <input 
               type="text" 
               id="email" 
-              value={userSelected?.email}
+              defaultValue={userSelected?.email || ''}
               className="rounded border border-gray-200 text-sm w-full font-normal leading-[18px] text-black tracking-[0px] appearance-none block h-11 m-0 p-[11px] focus:ring-2 ring-offset-2  ring-gray-900 outline-0" 
             />
           </div>
@@ -39,7 +40,7 @@ function MyAccount() {
             <input 
               type="text" 
               id="password" 
-              value={userSelected?.password}
+              defaultValue={userSelected?.password || ''}
               className="rounded border border-gray-200 text-sm w-full font-normal leading-[18px] text-black tracking-[0px] appearance-none block h-11 m-0 p-[11px] focus:ring-2 ring-offset-2 ring-gray-900 outline-0" 
             />
           </div>
