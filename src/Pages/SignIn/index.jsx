@@ -1,10 +1,11 @@
 import { useContext, useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCartContext } from '../../Context'
 import Layout from '../../Components/Layout'
 
 function SignIn() {
 
+  const navigate = useNavigate();
   const { 
     users,
     userSelected, 
@@ -19,12 +20,15 @@ function SignIn() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    setMessage('Log in to your account')
+    users.length > 0 
+      ? setMessage('Log in to your account')
+      : setMessage('You must create an account first!!')  
+    
     if (userSelected) {
       setEmail(userSelected.email)
       setPassword(userSelected.password)
     }
-  }, [setMessage]);
+  }, [setMessage, users, userSelected]);
 
   const validateUser = useCallback(() => {
     const validateInUsers = users.some(user => user.email === email && user.password === password)
@@ -42,12 +46,13 @@ function SignIn() {
     if (isValidUser) {
       const filteredUser = users.find(user => user.email === email && user.password === password)
       setUserSelected(filteredUser)
+      navigate('/')
     } else {
       setMessage('All fields are required!!')
     }
   }
 
-  const styles = !isValidUser ? 'text-red-500' : '';
+  const styles = userSelected && !isValidUser ? 'text-red-500' : '';
 
   return (
     <Layout>
