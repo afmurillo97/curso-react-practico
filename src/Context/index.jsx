@@ -3,9 +3,6 @@ import { createContext, useState, useEffect } from 'react'
 export const ShoppingCartContext = createContext()
 
 export const ShoppingCartProvider = ({children}) => {
-  // User Info: Create user
-  const [user, setUser] = useState({});
-
   // Shopping Cart · Increment quantity
   const [count, setCount] = useState(0)
 
@@ -37,6 +34,10 @@ export const ShoppingCartProvider = ({children}) => {
 
   // Get products by category
   const [searchByCategory, setSearchByCategory] = useState(null)
+
+  // User Info: Create user
+  const [users, setUsers] = useState([]);
+  const [userSelected, setUserSelected] = useState(null)
   
   const newCategory = (category) => {
     let newValue = category;
@@ -53,6 +54,10 @@ export const ShoppingCartProvider = ({children}) => {
     }
     return newValue;
   }
+
+	const [isRegistered, setIsRegistered] = useState(false);
+	const [message, setMessage] = useState('');
+  const [isValidUser, setIsValidUser] = useState(false);
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
@@ -96,6 +101,29 @@ export const ShoppingCartProvider = ({children}) => {
     if (!searchByTitle && !searchByCategory) setFilteredItems(filterBy(null, items, searchByTitle, searchByCategory))
   }, [items, searchByTitle, searchByCategory])
 
+  useEffect(() => {
+    const localStorageItem = localStorage.getItem('accounts')
+    const localStorageItemSelected = localStorage.getItem('account_selected')
+
+    if (localStorageItem) {
+      setUsers(JSON.parse(localStorageItem));
+      setUserSelected(JSON.parse(localStorageItemSelected))
+    } else {
+      localStorage.setItem('accounts', JSON.stringify([]));
+      localStorage.setItem('account_selected', null);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (users.length > 0) {
+      localStorage.setItem('accounts', JSON.stringify(users));
+      localStorage.setItem('account_selected', JSON.stringify(userSelected));
+    }
+  }, [users, userSelected]);
+
+  console.log(users)
+  console.log(userSelected)
+
   return (
     <ShoppingCartContext.Provider value={{
       count,
@@ -119,8 +147,16 @@ export const ShoppingCartProvider = ({children}) => {
       filteredItems,
       searchByCategory,
       setSearchByCategory,
-      user,
-      setUser,
+      users,
+      setUsers,
+      isRegistered,
+      setIsRegistered, 
+      message,
+      setMessage,
+      isValidUser,
+      setIsValidUser,
+      userSelected,
+      setUserSelected
     }}>
       {children}
     </ShoppingCartContext.Provider>
