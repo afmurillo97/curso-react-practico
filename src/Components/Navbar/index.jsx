@@ -1,10 +1,11 @@
 import { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
 
 const Navbar = () => {
   const context = useContext(ShoppingCartContext)
+  const navigate = useNavigate();
   const activeStyle = 'underline underline-offset-4'
 
   return (
@@ -81,36 +82,54 @@ const Navbar = () => {
           { context.userSelected?.email }
         </li>
         <li>
-          <NavLink
-            to='/my-orders'
-            className={({ isActive }) =>
-              isActive ? activeStyle : undefined
-            }>
-            My Orders
-          </NavLink>
+          { context.userSelected !== null && (
+            <NavLink
+              to='/my-orders'
+              className={({ isActive }) =>
+                isActive ? activeStyle : undefined
+              }>
+              My Orders
+            </NavLink>
+          ) }
         </li>
         <li>
-          <NavLink
-            to='/my-account'
-            className={({ isActive }) =>
-              isActive ? activeStyle : undefined
-            }>
-            My Account
-          </NavLink>
+          { context.userSelected !== null && (
+            <NavLink
+              to='/my-account'
+              className={({ isActive }) =>
+                isActive ? activeStyle : undefined
+              }>
+              My Account
+            </NavLink>
+          ) }
         </li>
-        <li>
-          <NavLink
-            to={ context.userSelected ? 'sign-out' : 'sign-in' }
-            className={({ isActive }) =>
-              isActive ? activeStyle : undefined
-            }>
-            { context.userSelected ? 'Sign Out' : 'Sign In' }
-          </NavLink>
+        <li>   
+          { !context.userSelected ? (
+            <NavLink
+              to='/sign-in'
+                className={({ isActive }) =>
+                isActive ? activeStyle : undefined
+                }>
+              Sign In
+            </NavLink>
+          ) : (
+            <span 
+              className='cursor-pointer'
+              onClick={() => {
+                context.setUserSelected(null)
+                navigate('/sign-in')
+              }}
+            >
+              Sign Out
+            </span>
+          ) }
         </li>
-        <li className='flex items-center'>
-          <ShoppingBagIcon className='h-6 w-6 text-black'></ShoppingBagIcon>
-          <div>{context.cartProducts.length}</div>
-        </li>
+        { context.userSelected !== null && (
+          <li className='flex items-center'>
+            <ShoppingBagIcon className='h-6 w-6 text-black'></ShoppingBagIcon>
+            <div>{context.cartProducts.length}</div>
+          </li>
+        )}
       </ul>
     </nav>
   )
