@@ -121,8 +121,6 @@ export const ShoppingCartProvider = ({children}) => {
     }
   }, [users, userSelected]);
 
-  console.log(users)
-  console.log(userSelected)
 
   return (
     <ShoppingCartContext.Provider value={{
