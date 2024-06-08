@@ -35,7 +35,7 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <ShoppingCartProvider>
-      <BrowserRouter basename='/react-laboratory'>
+      <BrowserRouter basename='/curso-react-practico'>
         <AppRoutes />
         <Navbar />
         <CheckoutSideMenu />
