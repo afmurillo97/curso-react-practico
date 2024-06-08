@@ -35,7 +35,7 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <ShoppingCartProvider>
-      <BrowserRouter>
+      <BrowserRouter basename='/react-laboratory'>
         <AppRoutes />
         <Navbar />
         <CheckoutSideMenu />
